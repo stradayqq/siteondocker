@@ -14,11 +14,43 @@ services:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro 
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - site
     networks:
       - webnet
+    
+  loki:
+    image: grafana/loki:3.0.0
+    volumes:
+     - ./loki/loki-config.yaml:/etc/loki/local-config.yaml:ro
+     - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - webnet
+  
+  promtail:
+    image: grafana/promtail:3.0.0
+    volumes:
+      - ./promtail/promtail-config.yaml:/etc/promtail/config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: -config.file=/etc/promtail/config.yaml
+    networks:
+      - webnet
+  
+  grafana:
+    image: grafana/grafana:10.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - webnet
+
+    
 
 networks:
   webnet:
+
+volumes:
+  grafana_data:
+  loki_data:
