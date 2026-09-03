@@ -18,4 +18,6 @@ jobs:
 
       - name: Deploy
         run: |
+          sleep 5
+          curl -sf http://${{ secrets.VPS_HOST }} > /dev/null && echo "Site is reachable" || (echo "Site unreachable" && exit 1)
           ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "deploy"
