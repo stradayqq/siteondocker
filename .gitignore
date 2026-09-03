@@ -1,0 +1,17 @@
+# secrets & keys
+.env
+*.key
+*.pem
+id_ed25519*
+deploy_key*
+*_rsa
+*_ed25519
+
+# logs
+*.log
+
+# OS / editor
+
+.DS_Store
+.idea/
+.vscode/
